@@ -5,19 +5,22 @@ text = open(r'the_journal_movies.txt', 'r').read().split('\n')
 f = open(r'error_movies.txt', 'a')
 
 # requesting website for information on movies
-import json, re, urllib, time, httplib
+import json, re, urllib, time, http.client
 
 # set up django to get database populated
 import os, django
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myproject.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'moviesapi.settings')
 django.setup()
 
 # import required models
-from movies.models import movie, actor, director, genre
+
+from .models import movie, genre, director, actor
+
+
 
 
 # set up fixed headers, varicables and meta data
-conn = httplib.HTTPSConnection("api.themoviedb.org")
+conn = http.client.HTTPSConnection("api.themoviedb.org")
 poster_path = "https://image.tmdb.org/t/p/w640"
 payload = "{}"
 credit = "/3/movie/{}/credits?api_key=a0cda0670d10a1f96ea56ac1d70c5067"
@@ -37,7 +40,7 @@ def get_info_and_store(name):
     data = json.loads(res.read())
 
     if not data['total_results']:
-        print "Could not find",name
+        print("Could not find",name)
         f.write(name+'\n')
         f.flush()
     else:
@@ -48,14 +51,14 @@ def get_info_and_store(name):
             object1 = movie.objects.filter(name=data_1['title'])[0]
         else:
             if data_1['poster_path']:
-                object1 = movie(name=data_1['title'],\
-                                release=data_1['release_date'],\
+                object1 = movie(name=data_1['title'],
+                                release=data_1['release_date'],
                                 poster=str(poster_path+data_1['poster_path']))
             else:
-                object1 = movie(name=data_1['title'], \
+                object1 = movie(name=data_1['title'],
                                 release=data_1['release_date'])
             object1.save()
-        print "stored:", data_1['title']
+        print ("stored:", data_1['title'])
         movie_id = data_1['id']
 
         # populating genre database
@@ -104,5 +107,5 @@ def get_info_and_store(name):
 
 count = 444
 for i in range(count, len(text)):
-    print i,
+    print(i),
     get_info_and_store(text[i])

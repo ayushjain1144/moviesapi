@@ -1,9 +1,9 @@
-from django.urls import path
+from django.conf.urls import url
 from . import views
 
 app_name = 'moviesapi'
 
 urlpatterns = [
-    path('movie/', views.MovieListView.as_view(), name='movie'),
-    path('movie/<int:pk>', views.MovieListView.as_view(), name='movie-detail'),
+    url('', views.MovieListView.as_view(), name = 'movie_list'),
+    #path('admin/', admin.site.urls),
 ]
