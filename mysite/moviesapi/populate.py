@@ -23,6 +23,7 @@ from .models import movie, genre, director, actor
 conn = http.client.HTTPSConnection("api.themoviedb.org")
 poster_path = "https://image.tmdb.org/t/p/w640"
 payload = "{}"
+
 credit = "/3/movie/{}/credits?api_key=a0cda0670d10a1f96ea56ac1d70c5067"
 film = "/3/search/movie?include_adult=false&page=1&query={}&language=en-US&api_key=a0cda0670d10a1f96ea56ac1d70c5067"
 
